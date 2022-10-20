@@ -12,11 +12,14 @@ module Data
     albums
   end
 
-#   def load_all_genres
-#     file = 'genre.json'
-#     safe_genres = []
-#     if if File.exist?(file) && File.read(file) != ''
-#         safe_genres = albums = JSON.parse(File.read(file)).map do ||
-#   end
+  def load_all_genres
+    file = 'genre.json'
+    safe_genres = []
+    if File.exist?(file) && File.read(file) != ''
+      safe_genres = JSON.parse(File.read(file)).map do |genre|
+        Genre.new(genre['1900'], genre['hip-hop'])
+      end
+    end
+    safe_genres
+  end
 end
-

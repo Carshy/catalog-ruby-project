@@ -7,30 +7,31 @@ class App
   attr_accessor :genre, :music_album
 
   def initialize
-    @genres = []
+    @genres = load_all_genres
     @music_album = load_all_albums
   end
 
   include Data
 
-#   def list_genres
-#     new_genre = Genre.new(2022, 'hip-hop')
-#     @genres.push(new_genre)
-#     if @genres.length.positive?
-#       @genres.each do |genre|
-#         puts " Date: #{genre.publish_date}, Name: #{genre.name}"
-#       end
-#     else
-#       puts 'No genre added'
-#     end
+  def list_genres
+    new_genre =  Genre.new(1900, 'hip-hop')
 
-#     safe_genres = []
-#     @genres.each do |genre|
-#         safe_genres.push({Date: genre.publish_date, Name: genre.name})
-#     end
+    @genres.push(new_genre)
+    if @genres.length.positive?
+      @genres.each do |genre|
+        puts " Date: #{genre.publish_date}, Name: #{genre.name}"
+      end
+    else
+      puts 'No genre added'
+    end
 
-#     File.write('genre.json', safe_genres.to_json)
-#   end
+    safe_genres = []
+    @genres.each do |genre|
+      safe_genres.push({ publish_date: genre.publish_date, name: genre.name })
+    end
+
+    File.write('genre.json', safe_genres.to_json)
+  end
 
   def add_music_album
     puts 'publish_date?: '
@@ -46,14 +47,14 @@ class App
     else
       puts 'Enter a valid response'
     end
-   
+
     new_music_album = MusicAlbum.new(publish_date, on_spotify)
     @music_album.push(new_music_album)
-    puts @music_album.publish_date
+    puts new_music_album.publish_date
 
     albums = []
     @music_album.each do |album|
-      albums.push({ Date: album.publish_date, on_spotify: album.on_spotify })
+      albums.push({publish_date: album.publish_date, on_spotify: album.on_spotify })
     end
     File.write('music_album.json', albums.to_json)
   end

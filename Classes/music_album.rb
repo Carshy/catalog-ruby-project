@@ -1,8 +1,7 @@
 require './item'
 
 class MusicAlbum < Item
-  attr_accessor :on_spotify 
-
+  attr_accessor :on_spotify
 
   def initialize(publish_date, on_spotify)
     super(publish_date)
@@ -13,4 +12,3 @@ class MusicAlbum < Item
     super() && on_spotify == true
   end
 end
-
