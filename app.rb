@@ -7,7 +7,7 @@ class App
   attr_accessor :genre, :music_album
 
   def initialize
-    @genres = load_all_genres
+    @genres = []
     @music_album = load_all_albums
   end
 
