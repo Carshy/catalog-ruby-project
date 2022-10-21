@@ -6,6 +6,7 @@ require './Classes/author'
 require './Classes/book'
 require './Classes/label'
 require './Classes/container'
+require './Classes/label_container'
 require 'json'
 
 class App
@@ -19,9 +20,7 @@ class App
     @books = read_books
     all_books = File.read('./Classes/json_files/book.json')
     File.write('./Classes/json_files/book.json', []) if all_books.empty?
-    @labels = read_labels
-    all_labels = File.read('./Classes/json_files/label.json')
-    File.write('./Classes/json_files/label.json', []) if all_labels.empty?
+    @label_container = LableContainer.new
   end
 
   include Data
@@ -125,8 +124,7 @@ class App
         puts "
         Multiplayer: #{game.multiplayer ? 'Yes' : 'No'}
         Last played at: #{game.last_played_at}
-        Published on: #{game.publish_date}
-        "
+        Published on: #{game.publish_date}"
       end
     end
   end
@@ -138,47 +136,24 @@ class App
     end
   end
 
-  def add_label
-    puts 'Enter the following details to fill the label'
-    puts ''
-    puts 'Enter Title: '
-    title = gets.chomp
-    puts 'Enter Color: '
-    color = gets.chomp
-    new_label = Label.new(title, color)
-    write_labels(new_label)
-    @labels << new_label
-    puts '***Label created successfully!***'
-  end
-
   def list_of_labels
-    if @labels.empty?
-      puts 'There is no available labels!'
-    else
-      puts ''
-      puts 'List of Labels: '
-      @labels.each_with_index do |label, index|
-        puts "#{index + 1}) Title: #{label.title} | Color: #{label.color}"
-      end
-    end 
+    @label_container.list_of_labels
   end
 
   def add_book
     puts 'Please fill the following to add a book'
     puts 'Enter Publisher: '
     publisher = gets.chomp
-    
+
     puts 'Enter cover state Good(Y) OR Bad(N): '
     status = gets.chomp
     cover_state = cover_status(status)
-
     puts 'Enter Publish Year: '
     year = gets.chomp
-
     book = Book.new(publisher, cover_state, year)
     write_books(book)
     @books << book
-    add_label
+    @label_container.add_label
     puts '*** You Successfully Added a Book ***'
   end
 
@@ -186,25 +161,24 @@ class App
     if @books.empty?
       puts 'There are no available books!'
     else
-      puts ''
       puts 'List of Books: '
       @books.each_with_index do |bk, indx|
-        puts "#{indx + 1}) Publisher: #{bk.publisher} | Publish Date: #{bk.publish_date} | Cover State: #{bk.cover_state}"
+        puts "#{indx + 1}) Publisher: #{bk.publisher} Publish Date: #{bk.publish_date} Cover State: #{bk.cover_state}"
       end
-    end 
+    end
   end
 
   def cover_status(status)
     case status
-      when 'y'
-        'good'
-      when 'n'
-        'bad'
-      else
-        puts 'Invalid Choice'
-        puts 'Cover state Good (Y) OR Bad (N):'
-        status = gets.chomp
-        cover_status(status)
-      end
+    when 'y'
+      'good'
+    when 'n'
+      'bad'
+    else
+      puts 'Invalid Choice'
+      puts 'Cover state Good (Y) OR Bad (N):'
+      status = gets.chomp
+      cover_status(status)
+    end
   end
 end
