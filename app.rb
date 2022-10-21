@@ -76,20 +76,19 @@ class App
   end
 
   def add_game
-    print "Is it a multiplayer game? [Y/N]: "
+    print 'Is it a multiplayer game? [Y/N]: '
     multiplayer_answer = gets.chomp.upcase
-    multiplayer = multiplayer_answer == "Y" ? true : false
-    print "Last played at: "
+    multiplayer = multiplayer_answer == 'Y'
+    print 'Last played at: '
     last_played_at = gets.chomp.to_i
-    print "Published at: "
+    print 'Published at: '
     publish_date = gets.chomp.to_i
     game = Game.new(multiplayer, last_played_at, publish_date)
     @games << game
-    
 
     new_games = []
     @games.each do |g|
-      new_games.push({multiplayer: g.multiplayer, last_played_at: g.last_played_at, publish_date: g.publish_date })
+      new_games.push({ multiplayer: g.multiplayer, last_played_at: g.last_played_at, publish_date: g.publish_date })
     end
     File.write('games.json', new_games.to_json)
 
@@ -103,15 +102,15 @@ class App
 
     new_author = []
     @authors.each do |auth|
-      new_author.push({first_name: auth.first_name, last_name: auth.last_name})
+      new_author.push({ first_name: auth.first_name, last_name: auth.last_name })
     end
     File.write('authors.json', new_author.to_json)
-    puts "Game is added successfully"
+    puts 'Game is added successfully'
   end
 
   def list_games
     if @games.empty?
-      puts "Games not found"
+      puts 'Games not found'
     else
       @games.each do |game|
         puts "
@@ -124,7 +123,7 @@ class App
   end
 
   def list_authors
-    puts "Currently there is no author" if @authors.empty?
+    puts 'Currently there is no author' if @authors.empty?
     @authors.each do |auth|
       puts "First Name: #{auth.first_name}, Last Name: #{auth.last_name}"
     end

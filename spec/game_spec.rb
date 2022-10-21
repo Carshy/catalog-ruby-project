@@ -1,6 +1,6 @@
 require './Classes/game'
 
-describe Game do 
+describe Game do
   before do
     @game = Game.new(true, 1990, 1985)
   end

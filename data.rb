@@ -37,7 +37,7 @@ module Data
   def load_all_authors
     file = 'author.json'
     authors = []
-    if File.exists?(file) && File.read(file) != ''
+    if File.exist?(file) && File.read(file) != ''
       authors = JSON.parse(File.read(file)).map do |auth|
         Author.new(auth['first_name'], auth['last_name'])
       end

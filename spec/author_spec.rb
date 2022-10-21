@@ -1,6 +1,5 @@
 require './Classes/author'
 
-
 describe Author do
   before do
     @author = Author.new('first', 'last')
@@ -11,10 +10,10 @@ describe Author do
   end
 
   it 'should return first name' do
-    expect(@author.first_name). to eq 'first'
+    expect(@author.first_name).to eq 'first'
   end
 
   it 'should return last name' do
-    expect(@author.last_name). to eq 'last'
+    expect(@author.last_name).to eq 'last'
   end
 end
