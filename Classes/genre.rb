@@ -15,5 +15,3 @@ class Genre < Item
     item.genre = self
   end
 end
-
-new_genre = Genre.new(2021, 'rap')

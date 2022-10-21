@@ -17,7 +17,7 @@ module Data
     safe_genres = []
     if File.exist?(file) && File.read(file) != ''
       safe_genres = JSON.parse(File.read(file)).map do |genre|
-        Genre.new(genre['1900'], genre['hip-hop'])
+        Genre.new(genre['publish_date'], genre['name'])
       end
     end
     safe_genres
