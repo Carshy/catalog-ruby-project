@@ -3,6 +3,9 @@ require './Classes/music_album'
 require './data'
 require './Classes/game'
 require './Classes/author'
+require './Classes/book'
+require './Classes/label'
+require './Classes/container'
 require 'json'
 
 class App
@@ -13,6 +16,12 @@ class App
     @music_album = load_all_albums
     @games = load_all_games
     @authors = load_all_authors
+    @books = read_books
+    all_books = File.read('./Classes/json_files/book.json')
+    File.write('./Classes/json_files/book.json', []) if all_books.empty?
+    @labels = read_labels
+    all_labels = File.read('./Classes/json_files/label.json')
+    File.write('./Classes/json_files/label.json', []) if all_labels.empty?
   end
 
   include Data
@@ -127,5 +136,75 @@ class App
     @authors.each do |auth|
       puts "First Name: #{auth.first_name}, Last Name: #{auth.last_name}"
     end
+  end
+
+  def add_label
+    puts 'Enter the following details to fill the label'
+    puts ''
+    puts 'Enter Title: '
+    title = gets.chomp
+    puts 'Enter Color: '
+    color = gets.chomp
+    new_label = Label.new(title, color)
+    write_labels(new_label)
+    @labels << new_label
+    puts '***Label created successfully!***'
+  end
+
+  def list_of_labels
+    if @labels.empty?
+      puts 'There is no available labels!'
+    else
+      puts ''
+      puts 'List of Labels: '
+      @labels.each_with_index do |label, index|
+        puts "#{index + 1}) Title: #{label.title} | Color: #{label.color}"
+      end
+    end 
+  end
+
+  def add_book
+    puts 'Please fill the following to add a book'
+    puts 'Enter Publisher: '
+    publisher = gets.chomp
+    
+    puts 'Enter cover state Good(Y) OR Bad(N): '
+    status = gets.chomp
+    cover_state = cover_status(status)
+
+    puts 'Enter Publish Year: '
+    year = gets.chomp
+
+    book = Book.new(publisher, cover_state, year)
+    write_books(book)
+    @books << book
+    add_label
+    puts '*** You Successfully Added a Book ***'
+  end
+
+  def list_of_books
+    if @books.empty?
+      puts 'There are no available books!'
+    else
+      puts ''
+      puts 'List of Books: '
+      @books.each_with_index do |bk, indx|
+        puts "#{indx + 1}) Publisher: #{bk.publisher} | Publish Date: #{bk.publish_date} | Cover State: #{bk.cover_state}"
+      end
+    end 
+  end
+
+  def cover_status(status)
+    case status
+      when 'y'
+        'good'
+      when 'n'
+        'bad'
+      else
+        puts 'Invalid Choice'
+        puts 'Cover state Good (Y) OR Bad (N):'
+        status = gets.chomp
+        cover_status(status)
+      end
   end
 end
