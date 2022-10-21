@@ -38,6 +38,7 @@ def main
     if choice == 10
       puts 'Thank you for using our App'
       break
+
     end
     start_app(app, choice)
   end
