@@ -22,4 +22,26 @@ module Data
     end
     safe_genres
   end
+
+  def load_all_games
+    file = 'games.json'
+    games = []
+    if File.exist?(file) && File.read(file) != ''
+      games = JSON.parse(File.read(file)).map do |game|
+        Game.new(game['multiplayer'], game['last_played_at'], game['publish_date'])
+      end
+    end
+    games
+  end
+
+  def load_all_authors
+    file = 'author.json'
+    authors = []
+    if File.exist?(file) && File.read(file) != ''
+      authors = JSON.parse(File.read(file)).map do |auth|
+        Author.new(auth['first_name'], auth['last_name'])
+      end
+    end
+    authors
+  end
 end
