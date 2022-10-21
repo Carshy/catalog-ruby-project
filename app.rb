@@ -3,6 +3,10 @@ require './Classes/music_album'
 require './data'
 require './Classes/game'
 require './Classes/author'
+require './Classes/book'
+require './Classes/label'
+require './Classes/container'
+require './Classes/label_container'
 require 'json'
 
 class App
@@ -13,6 +17,10 @@ class App
     @music_album = load_all_albums
     @games = load_all_games
     @authors = load_all_authors
+    @books = read_books
+    all_books = File.read('./Classes/json_files/book.json')
+    File.write('./Classes/json_files/book.json', []) if all_books.empty?
+    @label_container = LableContainer.new
   end
 
   include Data
@@ -116,8 +124,7 @@ class App
         puts "
         Multiplayer: #{game.multiplayer ? 'Yes' : 'No'}
         Last played at: #{game.last_played_at}
-        Published on: #{game.publish_date}
-        "
+        Published on: #{game.publish_date}"
       end
     end
   end
@@ -126,6 +133,52 @@ class App
     puts 'Currently there is no author' if @authors.empty?
     @authors.each do |auth|
       puts "First Name: #{auth.first_name}, Last Name: #{auth.last_name}"
+    end
+  end
+
+  def list_of_labels
+    @label_container.list_of_labels
+  end
+
+  def add_book
+    puts 'Please fill the following to add a book'
+    puts 'Enter Publisher: '
+    publisher = gets.chomp
+
+    puts 'Enter cover state Good(Y) OR Bad(N): '
+    status = gets.chomp
+    cover_state = cover_status(status)
+    puts 'Enter Publish Year: '
+    year = gets.chomp
+    book = Book.new(publisher, cover_state, year)
+    write_books(book)
+    @books << book
+    @label_container.add_label
+    puts '*** You Successfully Added a Book ***'
+  end
+
+  def list_of_books
+    if @books.empty?
+      puts 'There are no available books!'
+    else
+      puts 'List of Books: '
+      @books.each_with_index do |bk, indx|
+        puts "#{indx + 1}) Publisher: #{bk.publisher} Publish Date: #{bk.publish_date} Cover State: #{bk.cover_state}"
+      end
+    end
+  end
+
+  def cover_status(status)
+    case status
+    when 'y'
+      'good'
+    when 'n'
+      'bad'
+    else
+      puts 'Invalid Choice'
+      puts 'Cover state Good (Y) OR Bad (N):'
+      status = gets.chomp
+      cover_status(status)
     end
   end
 end

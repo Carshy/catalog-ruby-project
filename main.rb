@@ -3,11 +3,11 @@ require './app'
 def start_app(app, choice)
   case choice
   when 1
-    app.list_of_book
+    app.list_of_books
   when 2
-    app.list_people
+    app.list_of_labels
   when 3
-    app.create_person
+    app.add_book
   when 4
     app.list_music_albums
   when 5
@@ -30,7 +30,8 @@ def main
   puts 'Welcome to catalog of things: To use the app choose from the following'
   loop do
     puts 'Please choose an option by entering a number:'
-    puts '1 - List of Books
+    puts '
+       1 - List of Books
        2 - List all labels
        3 - Add a book
        4 - List all music albums
