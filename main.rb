@@ -14,6 +14,12 @@ def start_app(app, choice)
     app.list_genres
   when 6
     app.add_music_album
+  when 7
+    app.list_games
+  when 8
+    app.list_authors
+  when 9
+    app.add_game
   else
     puts 'Invalid choice'
   end

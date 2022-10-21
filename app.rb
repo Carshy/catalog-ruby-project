@@ -1,6 +1,8 @@
 require './Classes/genre'
 require './Classes/music_album'
 require './data'
+require './Classes/game'
+require './Classes/author'
 require 'json'
 
 class App
@@ -9,6 +11,8 @@ class App
   def initialize
     @genres = load_all_genres
     @music_album = load_all_albums
+    @games = load_all_games
+    @authors = load_all_authors
   end
 
   include Data
@@ -68,6 +72,61 @@ class App
       end
     else
       puts 'No music albums'
+    end
+  end
+
+  def add_game
+    print "Is it a multiplayer game? [Y/N]: "
+    multiplayer_answer = gets.chomp.upcase
+    multiplayer = multiplayer_answer == "Y" ? true : false
+    print "Last played at: "
+    last_played_at = gets.chomp.to_i
+    print "Published at: "
+    publish_date = gets.chomp.to_i
+    game = Game.new(multiplayer, last_played_at, publish_date)
+    @games << game
+    
+
+    new_games = []
+    @games.each do |g|
+      new_games.push({multiplayer: g.multiplayer, last_played_at: g.last_played_at, publish_date: g.publish_date })
+    end
+    File.write('games.json', new_games.to_json)
+
+    puts "Author's first name: "
+    first_name = gets.chomp
+    puts "Author's last name: "
+    last_name = gets.chomp
+    author = Author.new(first_name, last_name)
+    author.add_item(game)
+    @authors << author
+
+    new_author = []
+    @authors.each do |auth|
+      new_author.push({first_name: auth.first_name, last_name: auth.last_name})
+    end
+    File.write('authors.json', new_author.to_json)
+    puts "Game is added successfully"
+  end
+
+  def list_games
+    if @games.empty?
+      puts "Games not found"
+    else
+      @games.each do |game|
+        puts "
+        Multiplayer: #{game.multiplayer ? 'Yes' : 'No'}
+        Last played at: #{game.last_played_at}
+        Published on: #{game.publish_date}
+        "
+      end
+    end
+  end
+
+  def list_authors
+    puts "Currently there is no author" if @authors.empty?
+    @authors.each do |auth|
+      puts "First Name: #{auth.first_name}, Last Name: #{auth.last_name}"
     end
   end
 end
